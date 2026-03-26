@@ -6,7 +6,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress": ""
@@ -16,7 +18,7 @@
     "url": "git+https://github.com/Aritse-stack/cypress.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Valter Estevam Oliveira",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
