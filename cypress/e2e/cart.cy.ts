@@ -23,6 +23,14 @@ describe('Cart', () => {
     cy.get('[data-test="shopping-cart-badge"]').should('not.exist')
   })
 
+  it('Should add an item to the cart in the product page and remove it in the cart page', () => {
+    cy.get('[data-test="inventory-item-name"]').first().click()
+    cy.url().should('include', 'inventory-item')
+    cy.get('[data-test="add-to-cart"]').click()
+    cy.get('[data-test="remove"]').should('be.visible').click()
+    cy.get('[data-test="shopping-cart-badge"]').should('not.exist')
+  })
+
   it('Should add an item to the cart and remove it in the cart page', () => {
     cy.get('[data-test^="add-to-cart"]').first().click()
     cy.get('[data-test="shopping-cart-link"]').click()
