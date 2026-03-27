@@ -14,7 +14,6 @@ describe('Checkout', () => {
   })
 
   it('should complete checkout successfully', () => {
-
     // Start checkout
     cy.get('[data-test="checkout"]').should('be.enabled').click()
     cy.url().should('include', 'checkout-step-one')
@@ -28,7 +27,6 @@ describe('Checkout', () => {
     cy.get('[data-test="firstName"]').should('have.value', 'John')
     cy.get('[data-test="lastName"]').should('have.value', 'Doe')
     cy.get('[data-test="postalCode"]').should('have.value', '12345') 
-
 
     // Continue to next step
     cy.get('[data-test="continue"]').click()
