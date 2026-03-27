@@ -3,13 +3,8 @@ describe('Login', () => {
 
   beforeEach(() => {
     cy.visit('https://www.saucedemo.com')
-  })
-
-  it('Should connect to the website', () => {
     cy.url().should('include', 'saucedemo')
-  })
-
-  it('Should have the form visible', () => {
+    
     cy.get('[data-test="username"]').should('be.visible')
     cy.get('[data-test="password"]').should('be.visible')
     cy.get('[data-test="login-button"]').should('be.visible')

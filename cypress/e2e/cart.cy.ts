@@ -3,6 +3,10 @@ describe('Cart', () => {
 
   beforeEach(() => {
     // Login before each test
+    // problem_user
+    // performance_glitch_user
+    // standard_user
+    
     cy.login('standard_user', 'secret_sauce')
   })
 
