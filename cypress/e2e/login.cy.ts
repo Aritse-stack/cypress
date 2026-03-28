@@ -1,4 +1,7 @@
 
+// Realizando testes na pagina de login do site saucedemo.com utilizando o framework Cypress
+// O objetivo é validar o processo de login, incluindo casos de sucesso e falha, garantindo que a aplicação se comporte conforme esperado.
+// Usando uma abordagem mais deterministica, onde cada etapa do processo de login é verificada para garantir que os elementos estejam presentes e que as mensagens de erro sejam exibidas corretamente.
 describe('Login', () => {
 
   beforeEach(() => {
