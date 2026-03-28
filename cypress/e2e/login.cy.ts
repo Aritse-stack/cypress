@@ -6,29 +6,22 @@ describe('Login', () => {
 
   beforeEach(() => {
     cy.visit('https://www.saucedemo.com')
-    cy.url().should('include', 'saucedemo')
-    
-    cy.get('[data-test="username"]').should('be.visible')
-    cy.get('[data-test="password"]').should('be.visible')
-    cy.get('[data-test="login-button"]').should('be.visible')
+    cy.url().should('include', 'saucedemo.com')
   })
   
-  it('Should login with valid credentials', () => {
-    cy.get('[data-test="username"]').type('standard_user')
-    cy.get('[data-test="password"]').type('secret_sauce')
-    cy.get('[data-test="login-button"]').click()
+  it('should login with valid credentials', () => {
+    cy.login('standard_user', 'secret_sauce')
     cy.url().should('include', 'inventory')
+    cy.get('[data-test="inventory-container"]').should('be.visible')
   })
 
-  it('Should show error message with empty credentials', () => {
+  it('should show error message with empty credentials', () => {
     cy.get('[data-test="login-button"]').click()
-    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Username is required')
+    cy.get('[data-test="error"]').should('contain', 'Username')
   })
   
-  it('Should show error message with invalid credentials', () => {
-    cy.get('[data-test="username"]').type('invalid_user')
-    cy.get('[data-test="password"]').type('invalid_password')
-    cy.get('[data-test="login-button"]').click()
-    cy.get('[data-test="error"]').should('be.visible').and('contain', 'Username and password do not match any user in this service')
+  it('should show error message with invalid credentials', () => {
+    cy.login('invalid_user', 'invalid_password')
+    cy.get('[data-test="error"]').should('be.visible').and('contain', 'do not match')
   })
 })

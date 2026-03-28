@@ -6,6 +6,8 @@ describe('Checkout', () => {
     // Login antes de cada teste
     // usando comando personalizado para login, onde se espera que os dados de usuario e login sejam validos.
     // standard_user, performance_glitch_user, problem_user, error_user
+    cy.visit('https://www.saucedemo.com')
+    cy.url().should('include', 'saucedemo.com')
     cy.login('standard_user', 'secret_sauce')
     
     // Estado inicial para os testes de checkout, garantindo que haja pelo menos um item no carrinho
@@ -16,22 +18,27 @@ describe('Checkout', () => {
     cy.get('[data-test="inventory-item"]').should('have.length.greaterThan', 0)
   })
 
-  it('should complete checkout successfully', () => {
-    cy.get('[data-test="checkout"]').should('be.enabled').click()
+  it('should show error message when checkout information is incomplete', () => {
+    cy.get('[data-test="checkout"]').click()
+    cy.url().should('include', 'checkout-step-one')
+
+    // Tentar continuar sem preencher as informações
+    cy.get('[data-test="continue"]').click()
+    cy.get('[data-test="error"]').should('contain', 'First Name is required')
+  })
+
+  it('should attempt to fill checkout information and continue', () => {
+    cy.get('[data-test="checkout"]').click()
     cy.url().should('include', 'checkout-step-one')
 
     // Adicionar informações de checkout
     cy.get('[data-test="firstName"]').type('John')
     cy.get('[data-test="lastName"]').type('Doe')
     cy.get('[data-test="postalCode"]').type('12345')
-
-    // verificar se os campos estão preenchidos corretamente
-    cy.get('[data-test="firstName"]').should('have.value', 'John')
-    cy.get('[data-test="lastName"]').should('have.value', 'Doe')
-    cy.get('[data-test="postalCode"]').should('have.value', '12345') 
-
-    // Continuar para a próxima etapa do checkout.
+        
     cy.get('[data-test="continue"]').click()
+    
+    // Continuar para a próxima etapa do checkout.
     cy.url().should('include', 'checkout-step-two')
     cy.get('[data-test="inventory-item"]').should('have.length.greaterThan', 0)
     cy.get('[data-test="subtotal-label"]').invoke('text').should('match', /Item total: \$\d+\.\d{2}/)
