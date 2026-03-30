@@ -137,3 +137,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Report files from cypress and screenshots
+cypress/reports/
+cypress/screenshots/
