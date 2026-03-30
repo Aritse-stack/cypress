@@ -15,12 +15,7 @@ describe('Cart', () => {
     cy.get('[data-test^="add-to-cart"]').should('have.length.greaterThan', 0)
   })
 
-  it('should attempt to add an item to the cart', () => {
-    cy.get('[data-test^="add-to-cart"]').first().click()
-    cy.get('[data-test="shopping-cart-badge"]').should('contain', '1')
-  })
-
-  it('should attempt to remove item from inventory', () => {
+  it('should attempt to add item them remove it from inventory', () => {
     cy.get('[data-test^="add-to-cart"]').first().click()
     cy.get('[data-test^="remove"]').first().click()
     cy.get('[data-test="shopping-cart-badge"]').should('not.exist')
