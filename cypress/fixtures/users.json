@@ -1,0 +1,37 @@
+{
+  "validUser": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "description": "Normal user with full access"
+  },
+  "invalidUser": {
+    "username": "invalid_user",
+    "password": "invalid_password",
+    "description": "User with invalid credentials - login fails"
+  },
+  "errorUser": {
+    "username": "error_user",
+    "password": "secret_sauce",
+    "description": ""
+  },
+  "lockedOutUser": {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "description": "User account that is locked - login fails"
+  },
+  "problemUser": {
+    "username": "problem_user",
+    "password": "secret_sauce",
+    "description": "User that encounters cart/checkout issues"
+  },
+  "performanceUser": {
+    "username": "performance_glitch_user",
+    "password": "secret_sauce",
+    "description": "User that experiences slow page loads"
+  },
+  "visualUser": {
+    "username": "visual_user",
+    "password": "secret_sauce",
+    "description": "User that triggers UI rendering bugs (for visual regression testing)"
+  }
+}

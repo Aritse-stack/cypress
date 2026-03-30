@@ -1,8 +1,19 @@
 
-// Este é um comando personalizado para realizar login
-// leve em consideaçao que nesta parte do projeto se espera que os dados de usuario e login sejam validos.
+// Comando principal: realiza login com username e password fornecidos
 Cypress.Commands.add('login', (username: string, password: string) => {
-  cy.get('[data-test="username"]').should('be.visible').type(username)
-  cy.get('[data-test="password"]').should('be.visible').type(password)
-  cy.get('[data-test="login-button"]').should('be.visible').click()
+  cy.get('[data-test="username"]').type(username)
+  cy.get('[data-test="password"]').type(password)
+  cy.get('[data-test="login-button"]').click()
+})
+
+// Login com qualquer tipo de usuário da fixture users.json
+// Exemplo: cy.loginAs('validUser') ou cy.loginAs('lockedOutUser')
+Cypress.Commands.add('loginAs', (userType: string) => {
+  cy.fixture('users').then((users) => {
+    const user = users[userType]
+    if (!user) {
+      throw new Error(`User type "${userType}" not found in users.json`)
+    }
+    cy.login(user.username, user.password)
+  })
 })
