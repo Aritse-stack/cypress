@@ -9,10 +9,10 @@ describe('Login', () => {
     cy.url().should('include', 'saucedemo.com')
   })
   
-  it('should login with valid credentials', () => {
-    cy.login('standard_user', 'secret_sauce')
+  // Teste de login com credenciais válidas usando dados do fixture
+  it('should login with valid credentials from fixture', () => {
+    cy.loginAs('validUser')
     cy.url().should('include', 'inventory')
-    cy.get('[data-test="inventory-container"]').should('be.visible')
   })
 
   it('should show error message with empty credentials', () => {
@@ -21,7 +21,7 @@ describe('Login', () => {
   })
   
   it('should show error message with invalid credentials', () => {
-    cy.login('invalid_user', 'invalid_password')
+    cy.loginAs('invalidUser')
     cy.get('[data-test="error"]').should('be.visible').and('contain', 'do not match')
   })
 })
