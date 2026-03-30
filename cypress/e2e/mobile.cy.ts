@@ -4,9 +4,10 @@ describe('Mobile - Checkout', () => {
 
   beforeEach(() => {
     cy.viewport('iphone-6')
-
     cy.visit('https://www.saucedemo.com')
-    cy.login('visual_user', 'secret_sauce')
+    
+    cy.loginAs('validUser')
+    cy.url().should('include', 'inventory')
   })
 
   it('should complete checkout on mobile', () => {
@@ -22,5 +23,9 @@ describe('Mobile - Checkout', () => {
     cy.get('[data-test="finish"]').click()
 
     cy.get('[data-test="complete-header"]').should('contain', 'Thank you for your order!')
+    
+    // Voltando para a página de produtos
+    cy.get('[data-test="back-to-products"]').click()
+    cy.url().should('include', 'inventory')
   })
 })
