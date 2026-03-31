@@ -16,12 +16,12 @@ describe('User Types - Error Handling', () => {
 
   // Usuário com UI quebrada: login funciona, mas há bugs visuais
   // IMPORTANT: Este usuário causa bugs no rendering da página
-  it('should login with error_user but expect UI glitches', () => {
-    cy.loginAs('errorUser')
+  it('should login successfully with visual_user but expect visual issues', () => {
+    cy.loginAs('visualUser')
     cy.url().should('include', 'inventory')
+    
     // Note: elementos podem não renderizar corretamente com error_user
     // Por isso, este usuário é usado para testes de regressão visual
-    cy.get('[data-test="inventory-list"]').should('exist')
   })
 
   // Usuário bloqueado: login falha
@@ -31,10 +31,17 @@ describe('User Types - Error Handling', () => {
   })
 
   // Usuário com problemas no carrinho: problemas após login bem-sucedido
-  it('should login successfully with problem_user but may encounter checkout issues', () => {
+  it('should login successfully with problem_user but expect cart andcheckout issues', () => {
     cy.loginAs('problemUser')
     cy.url().should('include', 'inventory')
-    // Este usuário é para testar cenários de erro no checkout
+  })
+
+  // Login funciona, mas há problemas no carrinho e checkout
+  // Este usuário é usado para testar cenários de erro no carrinho e checkout
+  it('should login successfully with error_user but expect cart and checkout issues', () => {
+    cy.loginAs('errorUser')
+    cy.url().should('include', 'inventory')
+    cy.get('[data-test="inventory-list"]').should('exist')
   })
 
   // Usuário com performance lenta
@@ -43,5 +50,4 @@ describe('User Types - Error Handling', () => {
     cy.url().should('include', 'inventory')
     // Este usuário causa delays - use cy.intercept para simular ou aumentar timeout
   })
-
 })
