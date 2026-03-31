@@ -8,7 +8,7 @@ describe('Checkout', () => {
     cy.visit('https://www.saucedemo.com')
     cy.url().should('include', 'saucedemo.com')
     
-    cy.loginAs('problemUser')
+    cy.loginAs('standard_user')
     cy.url().should('include', 'inventory')
     
     // Estado inicial para os testes de checkout, garantindo que haja pelo menos um item no carrinho
