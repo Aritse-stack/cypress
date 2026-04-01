@@ -65,6 +65,7 @@ describe('Checkout', () => {
     cy.get('[data-test="inventory-item"]')
       .should('have.length.greaterThan', 0)
     cy.get('[data-test="subtotal-label"]')
+      .should('be.visible')
       .invoke('text')
       .should('match', /Item total: \$\d+\.\d{2}/)
 
