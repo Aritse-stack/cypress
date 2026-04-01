@@ -146,7 +146,7 @@ describe('Mobile - Checkout', () => {
           cy.wrap($button)
             .click()
       })
-
+      
       // Verificar se os produtos no carrinho correspondem aos produtos da página de inventário, garantindo que o processo de adição seja correto e que os dados sejam consistentes
       cy.get('[data-test="shopping-cart-link"]')
         .click()
