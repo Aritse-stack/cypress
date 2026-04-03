@@ -23,17 +23,25 @@ describe('Mobile - Checkout', () => {
       .should('include', 'saucedemo.com')
   })
 
-  it('Deve adicionar item ao carrinho e retirar o item do carrinho', () => {
-    cy.url()
-      .should('include', 'inventory')
-    
-    cy.get('[data-test^="add-to-cart"]')
+  it('Deve mostrar mensagem de erro quando o login falhar', () => {
+    // Realizando logout para testar o processo de login com credenciais inválidas
+    cy.get('#react-burger-menu-btn')
       .should('be.visible')
-      .first()
       .click()
+    cy.get('[data-test="logout-sidebar-link"]')
+      .should('be.visible')
+      .click()
+    cy.url()
+      .should('include', 'saucedemo.com')
+    // Tentando realizar login com credenciais inválidas para validar a mensagem de erro
+    cy.loginAs('invalidUser')
+    cy.get('[data-test="error"]')
+      .should('be.visible')
+      .and('contain', 'Username and password do not match any user in this service')
+  })
 
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('contain', '1')
+  it('Deve adicionar item ao carrinho e retirar o item do carrinho', () => {
+    cy.addFirstItemToCart()
 
     cy.get('[data-test^="remove"]')
       .should('be.visible')
@@ -43,12 +51,7 @@ describe('Mobile - Checkout', () => {
   })
 
   it('Deve realizar o processo de checkout corretamente', () => {
-    cy.get('[data-test^="add-to-cart"]')
-      .should('be.visible')
-      .first()
-      .click()
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('contain', '1')
+    cy.addFirstItemToCart()
 
     cy.get('[data-test="shopping-cart-link"]')
       .should('be.visible')
@@ -103,12 +106,8 @@ describe('Mobile - Checkout', () => {
   })
 
   it('Deve mostrar mensagem de erro quando as informações de checkout estão incompletas', () => {
-    cy.get('[data-test^="add-to-cart"]')
-      .should('be.visible')
-      .first()
-      .click()
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('contain', '1')
+    cy.addFirstItemToCart()
+
     cy.get('[data-test="shopping-cart-link"]')
       .should('be.visible')
       .click()
@@ -132,43 +131,43 @@ describe('Mobile - Checkout', () => {
     // garantindo que o processo seja determinístico e baseado em dados controlados
     cy.get('[data-test="inventory-item-name"]')
       .then(($links) => {
-      // Armazenar os nomes dos produtos em um array para comparação posterior
-      const productsNames: string[] = []
+        // Armazenar os nomes dos produtos em um array para comparação posterior
+        const productsNames: string[] = []
 
-      // Iterar sobre os elementos encontrados e extrair os nomes dos produtos.
-      $links.each((index, link) => {
-        productsNames.push(link.textContent?.trim() || '')
-      })
+        // Iterar sobre os elementos encontrados e extrair os nomes dos produtos.
+        $links.each((index, link) => {
+          productsNames.push(link.textContent?.trim() || '')
+        })
 
-      // Adicionar os produtos ao carrinho
-      cy.get('[data-test^="add-to-cart"]')
-        .each(($button) => {
+        // Adicionar os produtos ao carrinho
+        cy.get('[data-test^="add-to-cart"]')
+          .each(($button) => {
+            cy.wrap($button)
+              .click()
+          })
+
+        // Verificar se os produtos no carrinho correspondem aos produtos da página de inventário, garantindo que o processo de adição seja correto e que os dados sejam consistentes
+        cy.get('[data-test="shopping-cart-link"]')
+          .click()
+        cy.url()
+          .should('include', 'cart')
+
+        cy.get('[data-test="inventory-item-name"]')
+          .then(($cartItems) => {
+            const cartNames = [...$cartItems].map(el => el.textContent?.trim())
+
+            productsNames.forEach((name) => {
+              expect(cartNames).to.include(name)
+            })
+          })
+
+        // Remover os produtos do carrinho
+        cy.get('[data-test^="remove"]').each(($button) => {
           cy.wrap($button)
             .click()
-      })
-      
-      // Verificar se os produtos no carrinho correspondem aos produtos da página de inventário, garantindo que o processo de adição seja correto e que os dados sejam consistentes
-      cy.get('[data-test="shopping-cart-link"]')
-        .click()
-      cy.url()
-        .should('include', 'cart')
-
-      cy.get('[data-test="inventory-item-name"]')
-        .then(($cartItems) => {
-        const cartNames = [...$cartItems].map(el => el.textContent?.trim())
-
-        productsNames.forEach((name) => {
-          expect(cartNames).to.include(name)
         })
+        cy.get('[data-test="shopping-cart-badge"]')
+          .should('not.exist')
       })
-
-      // Remover os produtos do carrinho
-      cy.get('[data-test^="remove"]').each(($button) => {
-        cy.wrap($button)
-          .click()
-      })
-      cy.get('[data-test="shopping-cart-badge"]')
-        .should('not.exist')
-    })
   })
 })

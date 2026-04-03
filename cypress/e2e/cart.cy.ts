@@ -28,62 +28,46 @@ describe('Cart', () => {
   })
 
   it('Deve adicionar um item ao carrinho e removê-lo diretamente na pagina de inventário', () => {
-    cy.get('[data-test^="add-to-cart"]')
-      .should('be.visible')  
-      .first()
-      .click()
+    cy.addFirstItemToCart()
+
     cy.get('[data-test^="remove"]')
       .should('be.visible')
-      .first()
       .click()
 
-    // Verificar se o carrinho está vazio após remover o item, garantindo que o processo de adição e remoção funcione corretamente
     cy.get('[data-test="shopping-cart-badge"]')
       .should('not.exist')
+    //cy.removeAllItemsFromCart()
   })
 
   it('Deve adicionar e remover um item pela página de detalhes do produto', () => {
     cy.get('[data-test="inventory-item-name"]')
-      .should('be.visible')
       .first()
+      .should('be.visible')
       .click()
+
     cy.url()
       .should('include', 'inventory-item')
 
-    cy.get('[data-test="add-to-cart"]')
-      .should('be.visible')
-      .click()
-    cy.get('[data-test="remove"]')
+    cy.get('[data-test^="add-to-cart"]')
       .should('be.visible')
       .click()
 
-    // Verificar se o carrinho está vazio após remover o item, garantindo que o processo de adição e remoção funcione corretamente
+    cy.get('[data-test="shopping-cart-badge"]')
+      .should('be.visible')
+      .and('contain', '1')
+
+    cy.get('[data-test^="remove"]')
+      .should('be.visible')
+      .click()
+
     cy.get('[data-test="shopping-cart-badge"]')
       .should('not.exist')
   })
 
   it('Deve adicionar um item ao carrinho e removê-lo na página do carrinho', () => {
-    cy.get('[data-test^="add-to-cart"]')
-      .should('be.visible')
-      .first()
-      .click()
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('be.visible')
-      .and('contain', '1')
-    cy.get('[data-test="shopping-cart-link"]')
-      .should('be.visible')
-      .click()
-    cy.url()
-      .should('include', 'cart')
+    cy.addFirstItemToCart()
 
-    cy.get('[data-test="inventory-item"]')
-      .should('have.length.greaterThan', 0)
-    cy.get('[data-test^="remove"]')
-      .should('be.visible')
-      .first()
-      .click()
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('not.exist')
+    cy.removeAllItemsFromCart()
   })
 
   it('Deve adicionar múltiplos itens ao carrinho, comparar se os produtos da página de inventário foram adicionados e removê-los', () => {

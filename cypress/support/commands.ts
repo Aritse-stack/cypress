@@ -33,3 +33,42 @@ Cypress.Commands.add('loginAs', (userType: string) => {
     cy.login(user.username, user.password)
   })
 })
+
+Cypress.Commands.add('addFirstItemToCart', () => {
+  cy.get('[data-test="inventory-item"]')
+    .should('be.visible')
+    .find('[data-test^="add-to-cart"]')
+    .should('be.visible')
+    .first()
+    .click()
+
+  cy.get('[data-test="shopping-cart-badge"]')
+    .should('be.visible')
+    .invoke('text')
+    .then((text) => {
+      const itemCount = parseInt(text)
+      expect(itemCount).to.be.greaterThan(0)
+    })
+})
+
+
+Cypress.Commands.add('removeAllItemsFromCart', () => {
+  cy.get('[data-test="shopping-cart-link"]')
+    .should('be.visible')
+    .click()
+
+  cy.url()
+    .should('include', 'cart')
+
+  cy.get('[data-test="inventory-item"]')
+    .should('be.visible')
+    .each(($item) => {
+      cy.wrap($item)
+        .find('[data-test^="remove"]')
+        .should('be.visible')
+        .click()
+    })
+
+  cy.get('[data-test="shopping-cart-badge"]')
+    .should('not.exist')
+})  

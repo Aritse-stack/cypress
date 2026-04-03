@@ -17,12 +17,7 @@ describe('Checkout', () => {
       .should('include', 'inventory')
 
     // Estado inicial para os testes de checkout, garantindo que haja pelo menos um item no carrinho
-    cy.get('[data-test^="add-to-cart"]')
-      .should('be.visible')
-      .first()
-      .click()
-    cy.get('[data-test="shopping-cart-badge"]')
-      .should('contain', '1')
+    cy.addFirstItemToCart()
 
     cy.get('[data-test="shopping-cart-link"]')
       .should('be.visible')
